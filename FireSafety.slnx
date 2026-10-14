@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/beckend/">
+    <Project Path="FireSafety.Api/FireSafety.Api.csproj" />
+  </Folder>
+  <Folder Name="/doc/" />
+  <Folder Name="/frontend/" />
+  <Folder Name="/test/" />
+</Solution>
