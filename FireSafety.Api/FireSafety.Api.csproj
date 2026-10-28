@@ -19,6 +19,12 @@
 
   <ItemGroup>
     <Folder Include="Controllers\" />
+    <Folder Include="Infrastructure\Auth\" />
+    <Folder Include="Model\Entities\" />
+    <Folder Include="Model\Data\" />
+    <Folder Include="Model\Services\" />
+    <Folder Include="Database\" />
+    <Folder Include="View\DTOs\" />
   </ItemGroup>
 
 </Project>

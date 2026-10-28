@@ -9,7 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "frontend", "frontend", "{4D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "beckend", "beckend", "{0D58CD92-D1A8-4AC9-86A9-D4C6A28A470C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FireSafety", "FireSafety\FireSafety.csproj", "{A2AF20CE-6129-456E-8BAC-FF825CF59B44}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FireSafety.Api", "FireSafety.Api\FireSafety.Api.csproj", "{A2AF20CE-6129-456E-8BAC-FF825CF59B44}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
