@@ -1,4 +1,5 @@
 @FireSafety.Api_HostAddress = https://localhost:7007
+@DemoPassword = CHANGE_THIS_TO_YOUR_LOCAL_DEMO_PASSWORD
 
 ### Регистрация на клиент (първо изпълнение: 201; повторно със същия имейл: 409)
 POST {{FireSafety.Api_HostAddress}}/api/v1/auth/register
@@ -49,3 +50,63 @@ GET {{FireSafety.Api_HostAddress}}/api/v1/auth/me
 ### Текущ потребител с токена от заявката login -> 200
 GET {{FireSafety.Api_HostAddress}}/api/v1/auth/me
 Authorization: Bearer {{login.response.body.$.token}}
+
+### Списък с активни услуги без токен -> 200
+GET {{FireSafety.Api_HostAddress}}/api/v1/fire-service-types
+
+### Клиент не може да създава услуга -> 403
+POST {{FireSafety.Api_HostAddress}}/api/v1/fire-service-types
+Authorization: Bearer {{login.response.body.$.token}}
+Content-Type: application/json
+
+{ "name": "Тестова услуга за пожарна безопасност" }
+
+### Вход като демо администратор (паролата е от User Secrets)
+# @name adminLogin
+POST {{FireSafety.Api_HostAddress}}/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@firesafety.local",
+  "password": "{{DemoPassword}}"
+}
+
+### Admin създава нов вид услуга -> 201 (първо изпълнение)
+# @name newServiceType
+POST {{FireSafety.Api_HostAddress}}/api/v1/fire-service-types
+Authorization: Bearer {{adminLogin.response.body.$.token}}
+Content-Type: application/json
+
+{ "name": "Тестова услуга за пожарна безопасност" }
+
+### Повторено име -> 409
+POST {{FireSafety.Api_HostAddress}}/api/v1/fire-service-types
+Authorization: Bearer {{adminLogin.response.body.$.token}}
+Content-Type: application/json
+
+{ "name": "Тестова услуга за пожарна безопасност" }
+
+### Празно име -> 400
+POST {{FireSafety.Api_HostAddress}}/api/v1/fire-service-types
+Authorization: Bearer {{adminLogin.response.body.$.token}}
+Content-Type: application/json
+
+{ "name": "" }
+
+### Промяна на несъществуваща услуга -> 404
+PUT {{FireSafety.Api_HostAddress}}/api/v1/fire-service-types/999
+Authorization: Bearer {{adminLogin.response.body.$.token}}
+Content-Type: application/json
+
+{ "name": "Несъществуваща услуга" }
+
+### Администраторът преименува новата услуга -> 204
+PUT {{FireSafety.Api_HostAddress}}/api/v1/fire-service-types/{{newServiceType.response.body.$.fireServiceTypeId}}
+Authorization: Bearer {{adminLogin.response.body.$.token}}
+Content-Type: application/json
+
+{ "name": "Променена тестова услуга" }
+
+### Деактивиране (не физическо изтриване) -> 204
+DELETE {{FireSafety.Api_HostAddress}}/api/v1/fire-service-types/{{newServiceType.response.body.$.fireServiceTypeId}}
+Authorization: Bearer {{adminLogin.response.body.$.token}}
