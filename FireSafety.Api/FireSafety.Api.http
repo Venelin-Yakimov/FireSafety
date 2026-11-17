@@ -1,6 +1,51 @@
-@FireSafety.Api_HostAddress = http://localhost:5171
+@FireSafety.Api_HostAddress = https://localhost:7007
 
-GET {{FireSafety.Api_HostAddress}}/weatherforecast/
-Accept: application/json
+### Регистрация на клиент (първо изпълнение: 201; повторно със същия имейл: 409)
+POST {{FireSafety.Api_HostAddress}}/api/v1/auth/register
+Content-Type: application/json
 
-###
+{
+  "email": "demo.client@example.com",
+  "password": "DemoPassword123!",
+  "fullName": "Демо клиент",
+  "role": "Client"
+}
+
+### Опит за саморегистрация като Admin -> 400
+POST {{FireSafety.Api_HostAddress}}/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "email": "not-admin@example.com",
+  "password": "DemoPassword123!",
+  "fullName": "Невалиден администратор",
+  "role": "Admin"
+}
+
+### Регистрация на специалист
+POST {{FireSafety.Api_HostAddress}}/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "email": "demo.specialist@example.com",
+  "password": "DemoPassword123!",
+  "fullName": "Демо специалист",
+  "role": "FireSpecialist"
+}
+
+### Вход и запазване на токена за следващата заявка
+# @name login
+POST {{FireSafety.Api_HostAddress}}/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "demo.client@example.com",
+  "password": "DemoPassword123!"
+}
+
+### Текущ потребител без токен -> 401
+GET {{FireSafety.Api_HostAddress}}/api/v1/auth/me
+
+### Текущ потребител с токена от заявката login -> 200
+GET {{FireSafety.Api_HostAddress}}/api/v1/auth/me
+Authorization: Bearer {{login.response.body.$.token}}

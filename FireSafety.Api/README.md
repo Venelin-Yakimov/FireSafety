@@ -12,6 +12,10 @@ ASP.NET Core Web API за учебния проект „Пожарна безо
 | `Model/Data/AppDbContext.cs` | EF Core конфигурация на таблиците и начални видове услуги |
 | `Model/Data/Migrations/` | Миграции за създаване на схемата и SQL обектите |
 | `Model/Data/Sql/SqlObjects.cs` | SQL дефиниции на процедурите, изгледите и табличния тип |
+| `Controllers/` | API крайни точки за регистрация, вход и текущ потребител |
+| `Infrastructure/Auth/` | JWT токени, роли и claims |
+| `Infrastructure/Errors/` | Централно преобразуване на грешки към ProblemDetails |
+| `View/DTOs/` | Данни за вход и изход; хешът и телефонът не се връщат от Auth API |
 | `Database/02_objects.sql` | SQL скрипт за обектите от стъпка 8 |
 | `Program.cs` | Регистрация на базата и настройка на API и Swagger UI |
 
@@ -21,7 +25,17 @@ ASP.NET Core Web API за учебния проект „Пожарна безо
 
 1. Отворете `FireSafety.sln` в Visual Studio или терминал в главната папка на хранилището.
 2. Проверете `appsettings.json` за връзката `ConnectionStrings:Default`. Текущата настройка използва LocalDB и базата `FireSafety`.
-3. Създайте или актуализирайте базата от Package Manager Console:
+3. Настройте локални User Secrets за JWT ключа и паролата на примерните акаунти:
+
+   ```powershell
+   dotnet user-secrets init --project FireSafety.Api
+   $jwtKey = [Convert]::ToBase64String([Security.Cryptography.RandomNumberGenerator]::GetBytes(32))
+   dotnet user-secrets set "Jwt:Key" $jwtKey --project FireSafety.Api
+   dotnet user-secrets set "Seed:DemoPassword" "избери-своя-парола" --project FireSafety.Api
+   ```
+
+   Не записвайте JWT ключа или паролата в Git.
+4. Създайте или актуализирайте базата от Package Manager Console:
 
    ```powershell
    Update-Database -Project FireSafety.Api -StartupProject FireSafety.Api
@@ -33,7 +47,9 @@ ASP.NET Core Web API за учебния проект „Пожарна безо
    dotnet ef database update --project FireSafety.Api --startup-project FireSafety.Api
    ```
 
-4. Стартирайте проекта `FireSafety.Api` с профил `https`. В Development Swagger UI е достъпен на `/swagger`.
+5. Стартирайте проекта `FireSafety.Api` с профил `https`. В Development Swagger UI е достъпен на `/swagger`.
+
+При зададена `Seed:DemoPassword` в Development се създават акаунтите `admin@firesafety.local`, `client@firesafety.local` и `specialist@firesafety.local`. Паролата им е тази от User Secrets.
 
 ## База данни
 
@@ -43,4 +59,4 @@ ASP.NET Core Web API за учебния проект „Пожарна безо
 
 ## Състояние
 
-Проектът е подготвен до стъпка 8: модел на данните, миграции и SQL обекти. Контролери, вход/регистрация и останалите API функции са следващ етап от разработката.
+Проектът включва стъпка 9: регистрация, вход с JWT и защитен endpoint за текущия потребител. Следващите стъпки добавят Bearer автентикацията в Swagger и управлението на видовете услуги.
