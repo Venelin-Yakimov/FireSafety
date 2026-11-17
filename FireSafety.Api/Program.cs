@@ -1,6 +1,7 @@
 using System.Text;
 using FireSafety.Api.Infrastructure.Auth;
 using FireSafety.Api.Infrastructure.Errors;
+using FireSafety.Api.Infrastructure.OpenApi;
 using FireSafety.Model.Data;
 using FireSafety.Model.Entities;
 using FireSafety.Model.Services;
@@ -14,7 +15,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
-builder.Services.AddOpenApi();
+builder.Services.AddOpenApi(options =>
+    options.AddDocumentTransformer<BearerSecuritySchemeTransformer>());
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 

@@ -47,7 +47,7 @@ ASP.NET Core Web API за учебния проект „Пожарна безо
    dotnet ef database update --project FireSafety.Api --startup-project FireSafety.Api
    ```
 
-5. Стартирайте проекта `FireSafety.Api` с профил `https`. В Development Swagger UI е достъпен на `/swagger`.
+5. Стартирайте проекта `FireSafety.Api` с профил `https`. В Development Swagger UI е достъпен на `/swagger`. След вход копирайте само стойността на токена в бутона **Authorize**.
 
 При зададена `Seed:DemoPassword` в Development се създават акаунтите `admin@firesafety.local`, `client@firesafety.local` и `specialist@firesafety.local`. Паролата им е тази от User Secrets.
 
